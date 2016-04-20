@@ -21,6 +21,18 @@ CM_VERSION=${CM_VERSION:-latest}
 #
 # CM installs.
 #
+install_ansible()
+{
+    echo "==> Installing Ansible"
+    yum -y install epel-release libselinux-python
+    if [[ ${CM_VERSION:-} == 'latest' ]]; then
+        echo "==> Installing latest Ansible version"
+        yum -y install ansible
+    else
+        echo "==> Installing Ansible version ${CM_VERSION}"
+        yum -y install ansible-${CM_VERSION}
+    fi
+}
 
 install_chef()
 {
@@ -83,6 +95,10 @@ install_puppet()
 #
 
 case "${CM}" in
+  'ansible')
+    install_ansible
+    ;;
+
   'chef')
     install_chef
     ;;
